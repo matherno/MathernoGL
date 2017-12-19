@@ -202,4 +202,16 @@ Matrix4 matrixInverse(const Matrix4& matrix) {
 	return Matrix4(inverse);
 }
 
+Matrix4 matrixRotateBetween(const Vector3D& from, const Vector3D& to) {
+  Vector3D fromNormal = from.getUniform();
+  Vector3D toNormal = to.getUniform();
+  float angleBetween = (float)acos(dotProduct(fromNormal, toNormal));
+  if (angleBetween != 0)
+    {
+    Vector3D rotationAxis = crossProduct(fromNormal, toNormal);
+    return matrixRotate(rotationAxis, (float)radToDeg(angleBetween));
+    }
+  return Matrix4(1);
+}
+
 }

@@ -30,6 +30,7 @@ public:
 	std::string toString() const;
   void set(float x, float y, float z);
   float distanceToPoint(const Vector3D& point) const;
+  Vector3D inverse() const;
 
 	Vector3D operator+(const Vector3D& vector) const;
 	Vector3D operator-(const Vector3D& vector) const;

@@ -41,6 +41,10 @@ void mathernogl::Transform::rotate(const mathernogl::Vector3D& axis, float angle
   transformMatrix *= mathernogl::matrixRotate(axis, angle);
 }
 
+void mathernogl::Transform::rotateBetween(const mathernogl::Vector3D& from, const mathernogl::Vector3D& to){
+  transformMatrix *= mathernogl::matrixRotateBetween(from, to);
+}
+
 void mathernogl::Transform::scale(float scale) {
   transformMatrix *= mathernogl::matrixScale(scale, scale, scale);
 }
@@ -93,4 +97,16 @@ mathernogl::Vector3D mathernogl::Transform::transformNormal(const mathernogl::Ve
   transformClone.setAt(0, 3, 2);
   return (normal * transformClone).getUniform();
 }
+
+mathernogl::Vector3D mathernogl::Transform::getTranslationComponent() const {
+  float divisor = transformMatrix.getAt(3, 3);
+  if (divisor == 0) {
+    return Vector3D(0);
+  }
+  else {
+    divisor = 1.0f / divisor;
+    return mathernogl::Vector3D(transformMatrix.getAt(3, 0)*divisor, transformMatrix.getAt(3, 1)*divisor, transformMatrix.getAt(3, 2)*divisor);
+  }
+}
+
 

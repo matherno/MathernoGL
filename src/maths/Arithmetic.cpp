@@ -37,4 +37,11 @@ int clampi(int value, int min, int max) {
   return value;
 }
 
+float ccwAngleBetween(const Vector2D& first, const Vector2D& second) {
+  double dotProduct = first.x*second.x + first.y*second.y;
+  double determinant = first.x*second.y - first.y*second.x;
+  double angle = atan2(determinant, dotProduct);
+  return -1.0f * (float)radToDeg(angle);
+}
+
 }

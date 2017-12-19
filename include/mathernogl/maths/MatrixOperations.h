@@ -16,6 +16,7 @@ Matrix4 matrixTranslate(const Vector3D& translation);
 Matrix4 matrixTranslate(const float x, const float y, const float z);
 Matrix4 matrixRotate(const Vector3D& rotationAxis, const float rotationAngle);
 Matrix4 matrixRotate(const float x, const float y, const float z, const float rotationAngle);
+Matrix4 matrixRotateBetween(const Vector3D& from, const Vector3D& to);
 Matrix4 matrixPitch(float angle);
 Matrix4 matrixYaw(float angle);
 Matrix4 matrixRoll(float angle);
