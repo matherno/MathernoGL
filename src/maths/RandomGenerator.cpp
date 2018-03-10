@@ -16,6 +16,14 @@ float RandomGenerator::randomFloat() {
   return (float)rand() / RAND_MAX;
 }
 
+double RandomGenerator::randomDouble(double min, double max) {
+  return min + ((float)rand() / RAND_MAX) * (max-min);
+}
+
+double RandomGenerator::randomDouble() {
+  return (float)rand() / RAND_MAX;
+}
+
 int RandomGenerator::randomInt(int min, int max) {
   return min + (rand() % (max-min+1));
 }
@@ -26,7 +34,7 @@ RandomGenerator::RandomGenerator() {
 	getIntValue();
 }
 
-void RandomGenerator::setBounds(float min, float max) {
+void RandomGenerator::setBounds(double min, double max) {
 	if (min >= max) {
 		min = max - 1;
 	}
@@ -43,6 +51,10 @@ float RandomGenerator::getFloatValue() {
 	return getFloatValue(boundMin, boundMax);
 }
 
+double RandomGenerator::getDoubleValue() {
+  return getDoubleValue(boundMin, boundMax);
+}
+
 int RandomGenerator::getIntValue(int min, int max) {
 	std::uniform_int_distribution<int> distribution(min, max);
 	return distribution(generator);
@@ -51,6 +63,11 @@ int RandomGenerator::getIntValue(int min, int max) {
 float RandomGenerator::getFloatValue(float min, float max) {
 	std::uniform_real_distribution<float> distribution(min, max);
 	return distribution(generator);
+}
+
+double RandomGenerator::getDoubleValue(double min, double max) {
+  std::uniform_real_distribution<double> distribution(min, max);
+  return distribution(generator);
 }
 
 bool RandomGenerator::getBoolean(float probability /*= 0.5f*/) {

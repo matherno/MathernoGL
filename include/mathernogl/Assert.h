@@ -16,8 +16,10 @@ namespace mathernogl{
 
 #ifdef NDEBUG
 #define ASSERT(cond, msg)
+#define ASSERT_NO_GL_ERROR()
 #else
 #define ASSERT(cond, msg) if(!(cond)){ mathernogl::logError("Assert failed in " + FILE_LINE_DESC + ". " + msg); abort(); }
+#define ASSERT_NO_GL_ERROR() {uint error = glGetError(); ASSERT(error == 0, "OpenGL Error: " + std::to_string(error));}
 #endif
 
 }

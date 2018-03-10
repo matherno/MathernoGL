@@ -28,10 +28,11 @@
 #include <mathernogl/utils/MeshUtils.h>
 #include <mathernogl/utils/MappedList.h>
 #include <mathernogl/utils/Misc.h>
+#include <mathernogl/utils/FontImporter.h>
 
 #include <mathernogl/maths/Maths.h>
 
 #include <mathernogl/Assert.h>
 #include <mathernogl/Types.h>
 
-#include <../dependencies/include/tiny_obj_loader.h>
+#include <tiny_obj_loader.h>

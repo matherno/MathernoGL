@@ -31,10 +31,13 @@ Window* initGL(std::string windowName, uint windowWidth, uint windowHeight, bool
     return window;
 }
 
-void setAlphaBlending(bool active) {
+void setAlphaBlending(bool active, bool additive) {
     if(active) {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_BLEND);
+        if (additive)
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE);      // doesn't seems to work????
+        else
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
     else{
         glDisable(GL_BLEND);
@@ -70,6 +73,10 @@ void setDepthTest(bool active) {
     else{
         glDisable(GL_DEPTH_TEST);
     }
+}
+
+void clearGLErrors(){
+  while(glGetError() != 0);
 }
 
 }

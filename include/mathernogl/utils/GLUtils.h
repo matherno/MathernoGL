@@ -20,7 +20,7 @@ Window *initGL(std::string windowName, uint windowWidth, uint windowHeight, bool
  * sets the state of alpha blending
  * uses default alpha blending settings
  */
-void setAlphaBlending(bool active);
+void setAlphaBlending(bool active, bool additive = false);
 
 /*
  * sets the state of face culling
@@ -33,4 +33,6 @@ void setFaceCulling(bool active, bool cullBackFace = true, bool ccwFrontFace = t
  * sets the state of the depth test
  */
 void setDepthTest(bool active);
+
+void clearGLErrors();
 }

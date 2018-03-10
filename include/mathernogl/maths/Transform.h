@@ -25,13 +25,13 @@ public:
   Transform getInverse() const;
   Vector3D getTranslationComponent() const;
 
-  void translate(float x, float y, float z);
+  void translate(double x, double y, double z);
   void translate(const Vector3D& translation);
-  void rotate(float axisX, float axisY, float axisZ, float angle);
-  void rotate(const Vector3D& axis, float angle);
+  void rotate(double axisX, double axisY, double axisZ, double angle);
+  void rotate(const Vector3D& axis, double angle);
   void rotateBetween(const Vector3D& from, const Vector3D& to);
-  void scale(float scale);
-  void scale(float scaleX, float scaleY, float scaleZ);
+  void scale(double scale);
+  void scale(double scaleX, double scaleY, double scaleZ);
   void scale(const Vector3D& scale);
 
   Vector3D transform(const Vector3D& point) const;

@@ -18,11 +18,15 @@ double degToRad(double degrees) {
 }
 
 bool compareFloat(float a, float b, unsigned int maxUlps){
-    assert(sizeof(float) == sizeof(int));
+  static_assert(sizeof(float) == sizeof(int), "");
     if (a == b)
         return true;
     int intDiff = abs(*(int*)&a - *(int*)&b);
     return maxUlps >= intDiff;
+}
+
+double clampd(double value, double min, double max){
+  return std::max(std::min(value, max), min);
 }
 
 float clampf(float value, float min, float max){
@@ -37,11 +41,20 @@ int clampi(int value, int min, int max) {
   return value;
 }
 
-float ccwAngleBetween(const Vector2D& first, const Vector2D& second) {
-  double dotProduct = first.x*second.x + first.y*second.y;
-  double determinant = first.x*second.y - first.y*second.x;
+double ccwAngleBetween(const Vector2D& first, const Vector2D& second) {
+  Vector2D f = first;
+  Vector2D s = second;
+  f.makeUniform();
+  s.makeUniform();
+  double dotProduct = f.x*s.x + f.y*s.y;
+  double determinant = f.x*s.y - f.y*s.x;
   double angle = atan2(determinant, dotProduct);
   return -1.0f * (float)radToDeg(angle);
+}
+
+Vector3D lerpVector3D(const Vector3D& first, const Vector3D& second, double factor){
+  factor = clampd(factor, 0, 1);
+  return (first * (1.0f-factor)) + (second * factor);
 }
 
 }

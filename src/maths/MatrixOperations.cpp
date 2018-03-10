@@ -8,23 +8,23 @@ Matrix4 matrixIdentity() {
 }
 
 Matrix4 matrixTranslate(const Vector3D& translation) {
-	std::vector<float> matrix = { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, translation.x, translation.y, translation.z, 1.0 };
+	std::vector<double> matrix = { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, translation.x, translation.y, translation.z, 1.0 };
 
 	return Matrix4(matrix);
 }
 
-Matrix4 matrixTranslate(const float x, const float y, const float z) {
+Matrix4 matrixTranslate(double x, double y, double z) {
 	return matrixTranslate(Vector3D(x, y, z));
 }
 
-Matrix4 matrixRotate(const Vector3D& rotationAxis, const float rotationAngle) {
-	const float cosAngle = cos(degToRad(-rotationAngle));
-	const float sinAngle = sin(degToRad(-rotationAngle));
-	const float x = rotationAxis.x;
-	const float y = rotationAxis.y;
-	const float z = rotationAxis.z;
+Matrix4 matrixRotate(const Vector3D& rotationAxis, double rotationAngle) {
+	double cosAngle = cos(degToRad(-rotationAngle));
+	double sinAngle = sin(degToRad(-rotationAngle));
+	double x = rotationAxis.x;
+	double y = rotationAxis.y;
+	double z = rotationAxis.z;
 
-	std::vector<float> matrix(16);
+	std::vector<double> matrix(16);
 	matrix[0] = cosAngle + x * x * (1 - cosAngle);
 	matrix[1] = x * y * (1 - cosAngle) - z * sinAngle;
 	matrix[2] = x * z * (1 - cosAngle) + y * sinAngle;
@@ -45,14 +45,14 @@ Matrix4 matrixRotate(const Vector3D& rotationAxis, const float rotationAngle) {
 	return Matrix4(matrix);
 }
 
-Matrix4 matrixRotate(const float x, const float y, const float z, const float rotationAngle) {
+Matrix4 matrixRotate(double x, double y, double z, double rotationAngle) {
 	return matrixRotate(Vector3D(x, y, z), rotationAngle);
 }
 
-Matrix4 matrixPitch(float angle) {
-    const float cosAngle = cos(degToRad(angle));
-    const float sinAngle = sin(degToRad(angle));
-    std::vector<float> matrix(16);
+Matrix4 matrixPitch(double angle) {
+    double cosAngle = cos(degToRad(angle));
+    double sinAngle = sin(degToRad(angle));
+    std::vector<double> matrix(16);
     matrix[0] = 1.0f;
     matrix[1] = 0.0f;
     matrix[2] = 0.0f;
@@ -72,10 +72,10 @@ Matrix4 matrixPitch(float angle) {
     return Matrix4(matrix);
 }
 
-Matrix4 matrixYaw(float angle) {
-    const float cosAngle = cos(degToRad(angle));
-    const float sinAngle = sin(degToRad(angle));
-    std::vector<float> matrix(16);
+Matrix4 matrixYaw(double angle) {
+    double cosAngle = cos(degToRad(angle));
+    double sinAngle = sin(degToRad(angle));
+    std::vector<double> matrix(16);
     matrix[0] = cosAngle;
     matrix[1] = 0.0f;
     matrix[2] = -sinAngle;
@@ -95,10 +95,10 @@ Matrix4 matrixYaw(float angle) {
     return Matrix4(matrix);
 }
 
-Matrix4 matrixRoll(float angle) {
-    const float cosAngle = cos(degToRad(angle));
-    const float sinAngle = sin(degToRad(angle));
-    std::vector<float> matrix(16);
+Matrix4 matrixRoll(double angle) {
+    double cosAngle = cos(degToRad(angle));
+    double sinAngle = sin(degToRad(angle));
+    std::vector<double> matrix(16);
     matrix[0] = cosAngle;
     matrix[1] = sinAngle;
     matrix[2] = 0.0f;
@@ -119,7 +119,7 @@ Matrix4 matrixRoll(float angle) {
 }
 
 Matrix4 matrixScale(const Vector3D& scaling) {
-	std::vector<float> matrix = { scaling.x, 0.0, 0.0, 0.0,
+	std::vector<double> matrix = { scaling.x, 0.0, 0.0, 0.0,
 									0.0, scaling.y, 0.0, 0.0,
 									0.0, 0.0, scaling.z, 0.0,
 									0.0, 0.0, 0.0, 1.0 };
@@ -127,16 +127,16 @@ Matrix4 matrixScale(const Vector3D& scaling) {
 	return Matrix4(matrix);
 }
 
-Matrix4 matrixScale(const float x, const float y, const float z) {
+Matrix4 matrixScale(double x, double y, double z) {
 	return matrixScale(Vector3D(x, y, z));
 }
 
-Matrix4 matrixScale(const float scaling) {
+Matrix4 matrixScale(double scaling) {
 	return matrixScale(Vector3D(scaling, scaling, scaling));
 }
 
-Matrix4 matrixPerspective(const float fov, const float aspectRatio, float zNearPlane, float zFarPlane) {
-	std::vector<float> matrix(16);
+Matrix4 matrixPerspective(double fov, double aspectRatio, double zNearPlane, double zFarPlane) {
+	std::vector<double> matrix(16);
 	zNearPlane *= -1;
 	zFarPlane *= -1;
 	for (int index = 0; index < 16; index++) {
@@ -151,8 +151,8 @@ Matrix4 matrixPerspective(const float fov, const float aspectRatio, float zNearP
 	return Matrix4(matrix);
 }
 
-Matrix4 matrixOrthogonal(const float fov, const float aspectRatio, const float zFarPlane) {
-	std::vector<float> matrix(16);
+Matrix4 matrixOrthogonal(double fov, double aspectRatio, double zFarPlane) {
+	std::vector<double> matrix(16);
 	for (int index = 0; index < 16; index++) {
 		matrix[index] = 0;
 	}
@@ -166,8 +166,8 @@ Matrix4 matrixOrthogonal(const float fov, const float aspectRatio, const float z
 }
 
 Matrix4 matrixInverse(const Matrix4& matrix) {
-	std::vector<float> inverse(16);
-	const std::vector<float> matrixArray = matrix.getArray();
+	std::vector<double> inverse(16);
+	const std::vector<double> matrixArray = matrix.getArray();
 
 	inverse[0] = matrixArray[5] * matrixArray[10] * matrixArray[15] - matrixArray[5] * matrixArray[11] * matrixArray[14] - matrixArray[9] * matrixArray[6] * matrixArray[15] + matrixArray[9] * matrixArray[7] * matrixArray[14] + matrixArray[13] * matrixArray[6] * matrixArray[11] - matrixArray[13] * matrixArray[7] * matrixArray[10];
 	inverse[4] = -matrixArray[4] * matrixArray[10] * matrixArray[15] + matrixArray[4] * matrixArray[11] * matrixArray[14] + matrixArray[8] * matrixArray[6] * matrixArray[15] - matrixArray[8] * matrixArray[7] * matrixArray[14] - matrixArray[12] * matrixArray[6] * matrixArray[11] + matrixArray[12] * matrixArray[7] * matrixArray[10];
@@ -186,7 +186,7 @@ Matrix4 matrixInverse(const Matrix4& matrix) {
 	inverse[11] = -matrixArray[0] * matrixArray[5] * matrixArray[11] + matrixArray[0] * matrixArray[7] * matrixArray[9] + matrixArray[4] * matrixArray[1] * matrixArray[11] - matrixArray[4] * matrixArray[3] * matrixArray[9] - matrixArray[8] * matrixArray[1] * matrixArray[7] + matrixArray[8] * matrixArray[3] * matrixArray[5];
 	inverse[15] = matrixArray[0] * matrixArray[5] * matrixArray[10] - matrixArray[0] * matrixArray[6] * matrixArray[9] - matrixArray[4] * matrixArray[1] * matrixArray[10] + matrixArray[4] * matrixArray[2] * matrixArray[9] + matrixArray[8] * matrixArray[1] * matrixArray[6] - matrixArray[8] * matrixArray[2] * matrixArray[5];
 
-	const float determinant = matrixArray[0] * inverse[0] + matrixArray[1] * inverse[4] + matrixArray[2] * inverse[8] + matrixArray[3] * inverse[12];
+	double determinant = matrixArray[0] * inverse[0] + matrixArray[1] * inverse[4] + matrixArray[2] * inverse[8] + matrixArray[3] * inverse[12];
 
 	if (determinant != 0) {
 		for (int i = 0; i < 16; i++) {
@@ -205,11 +205,11 @@ Matrix4 matrixInverse(const Matrix4& matrix) {
 Matrix4 matrixRotateBetween(const Vector3D& from, const Vector3D& to) {
   Vector3D fromNormal = from.getUniform();
   Vector3D toNormal = to.getUniform();
-  float angleBetween = (float)acos(dotProduct(fromNormal, toNormal));
+  double angleBetween = acos(dotProduct(fromNormal, toNormal));
   if (angleBetween != 0)
     {
     Vector3D rotationAxis = crossProduct(fromNormal, toNormal);
-    return matrixRotate(rotationAxis, (float)radToDeg(angleBetween));
+    return matrixRotate(rotationAxis, radToDeg(angleBetween));
     }
   return Matrix4(1);
 }

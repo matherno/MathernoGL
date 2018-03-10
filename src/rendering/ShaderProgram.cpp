@@ -1,4 +1,5 @@
 #include <mathernogl/rendering/ShaderProgram.h>
+#include <mathernogl/maths/Vector4D.h>
 
 namespace mathernogl {
 
@@ -111,29 +112,59 @@ void ShaderProgram::cleanUp() {
 }
 
 //must enable shader program before performing this operation
-void ShaderProgram::setVarFloat(const std::string& name, float value) {
+void ShaderProgram::setVarFloat(const std::string& name, float value, bool optional) {
+  if (optional && !hasUniformVariable(name))
+    return;
 	glUniform1f(getUniformLocation(name), value);
 }
 
 //must enable shader program before performing this operation
-void ShaderProgram::setVarInt(const std::string& name, int value) {
+void ShaderProgram::setVarInt(const std::string& name, int value, bool optional) {
+  if (optional && !hasUniformVariable(name))
+    return;
 	glUniform1i(getUniformLocation(name), value);
 }
 
-//must enable shader program before performing this operation
-void ShaderProgram::setVarVec2(const std::string &name, const Vector2D &value) {
-    glUniform2f(getUniformLocation(name), value.x, value.y);
+std::string constructArrayName(const std::string& name, int index){
+  return name + "[" + std::to_string(index) + "]";
 }
 
 //must enable shader program before performing this operation
-void ShaderProgram::setVarVec3(const std::string &name, const Vector3D& value) {
-    glUniform3f(getUniformLocation(name), value.x, value.y, value.z);
+void ShaderProgram::setVarIntArray(const std::string& name, int index, int value, bool optional){
+  if (optional && !hasUniformVariable(name))
+    return;
+  glUniform1i(getUniformLocation(constructArrayName(name, index)), value);
 }
 
 //must enable shader program before performing this operation
-void ShaderProgram::setVarMat4(const std::string &name, const Matrix4& value) {
-    const float* matrix = value.getCArray();
-    glUniformMatrix4fv(getUniformLocation(name), 1, GL_TRUE, matrix);
+void ShaderProgram::setVarVec2(const std::string &name, const Vector2D &value, bool optional) {
+  if (optional && !hasUniformVariable(name))
+    return;
+  glUniform2f(getUniformLocation(name), value.x, value.y);
+}
+
+//must enable shader program before performing this operation
+void ShaderProgram::setVarVec3(const std::string &name, const Vector3D& value, bool optional) {
+  if (optional && !hasUniformVariable(name))
+    return;
+  glUniform3f(getUniformLocation(name), value.x, value.y, value.z);
+}
+
+//must enable shader program before performing this operation
+void ShaderProgram::setVarVec4(const std::string& name, const Vector4D& value, bool optional) {
+  if (optional && !hasUniformVariable(name))
+    return;
+  glUniform4f(getUniformLocation(name), value.x, value.y, value.z, value.w);
+}
+
+  //must enable shader program before performing this operation
+void ShaderProgram::setVarMat4(const std::string &name, const Matrix4& value, bool optional) {
+  if (optional && !hasUniformVariable(name))
+    return;
+  const double* dmatrix = value.getCArray();
+  float matrix[16];
+  std::copy(dmatrix, dmatrix + 16, matrix);
+  glUniformMatrix4fv(getUniformLocation(name), 1, GL_TRUE, matrix);
 }
 
 void ShaderProgram::enable() const {
@@ -155,6 +186,5 @@ int ShaderProgram::getUniformLocation(const std::string& name) {
     }
     return glUniformID;
 }
-
 
 }

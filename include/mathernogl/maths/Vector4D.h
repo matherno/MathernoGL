@@ -10,7 +10,8 @@
 
 namespace mathernogl {
 
-class Vector3D;
+template<class T> class TVector3D;
+typedef TVector3D<double> Vector3D;
 
 class Vector4D {
 public:

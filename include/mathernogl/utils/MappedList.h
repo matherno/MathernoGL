@@ -23,15 +23,25 @@ public:
     itemIters[id] = --items.end();
     }
 
+  void addFront(T item, uint id)
+    {
+    remove(id);
+    items.push_front(item);
+    itemIters[id] = items.begin();
+    }
+
   void remove(uint id)
     {
     if (contains(id))
+      {
       items.erase(itemIters[id]);
+      itemIters.erase(id);
+      }
     }
 
   int count() const
     {
-    return (int)itemIters.size();
+    return (int)items.size();
     }
 
   bool contains(uint id) const
@@ -41,10 +51,22 @@ public:
 
   T get(uint id)
     {
-    if (contains(id))
-      return *itemIters[id];
-    else
-      return nullptr;
+    return *itemIters[id];
+    }
+
+  T* getPtr(uint id)
+    {
+    return &(*itemIters[id]);
+    }
+
+  const T get(uint id) const
+    {
+    return *itemIters.at(id);
+    }
+
+  const T* getPtr(uint id) const
+    {
+    return &(*itemIters[id]);
     }
 
   void clear()
@@ -54,6 +76,11 @@ public:
     }
 
   std::list<T>* getList()
+    {
+    return &items;
+    }
+
+  const std::list<T>* getList() const
     {
     return &items;
     }

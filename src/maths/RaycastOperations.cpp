@@ -2,7 +2,7 @@
 
 namespace mathernogl {
 
-Vector3D getRaycastIntersectionOnXZPlane(const Raycast& raycast, const float planeOffset){
+Vector3D getRaycastIntersectionOnXZPlane(const Raycast& raycast, const double planeOffset){
 	Vector3D intersectPoint;
 
 	if(raycast.direction.y == 0){
@@ -13,7 +13,7 @@ Vector3D getRaycastIntersectionOnXZPlane(const Raycast& raycast, const float pla
 	}
 
 
-	const float tValue = (planeOffset - raycast.position.y) / raycast.direction.y;
+	const double tValue = (planeOffset - raycast.position.y) / raycast.direction.y;
 	if(tValue < raycast.minTValue || tValue > raycast.maxTValue){
 		throw mgl_no_intersection("Raycast does not intersect the XZ plane with offset " + std::to_string(planeOffset) + ". The raycasts bounds prevent it from intersecting ");
 	}

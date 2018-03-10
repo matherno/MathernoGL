@@ -25,7 +25,7 @@ void mathernogl::Transform::setIdentityMatrix() {
   transformMatrix = mathernogl::matrixIdentity();
 }
 
-void mathernogl::Transform::translate(float x, float y, float z) {
+void mathernogl::Transform::translate(double x, double y, double z) {
   transformMatrix *= mathernogl::matrixTranslate(x, y, z);
 }
 
@@ -33,11 +33,11 @@ void mathernogl::Transform::translate(const mathernogl::Vector3D& translation) {
   transformMatrix *= mathernogl::matrixTranslate(translation);
 }
 
-void mathernogl::Transform::rotate(float axisX, float axisY, float axisZ, float angle) {
+void mathernogl::Transform::rotate(double axisX, double axisY, double axisZ, double angle) {
   transformMatrix *= mathernogl::matrixRotate(axisX, axisY, axisZ, angle);
 }
 
-void mathernogl::Transform::rotate(const mathernogl::Vector3D& axis, float angle) {
+void mathernogl::Transform::rotate(const mathernogl::Vector3D& axis, double angle) {
   transformMatrix *= mathernogl::matrixRotate(axis, angle);
 }
 
@@ -45,11 +45,11 @@ void mathernogl::Transform::rotateBetween(const mathernogl::Vector3D& from, cons
   transformMatrix *= mathernogl::matrixRotateBetween(from, to);
 }
 
-void mathernogl::Transform::scale(float scale) {
+void mathernogl::Transform::scale(double scale) {
   transformMatrix *= mathernogl::matrixScale(scale, scale, scale);
 }
 
-void mathernogl::Transform::scale(float scaleX, float scaleY, float scaleZ) {
+void mathernogl::Transform::scale(double scaleX, double scaleY, double scaleZ) {
   transformMatrix *= mathernogl::matrixScale(scaleX, scaleY, scaleZ);
 }
 
@@ -99,7 +99,7 @@ mathernogl::Vector3D mathernogl::Transform::transformNormal(const mathernogl::Ve
 }
 
 mathernogl::Vector3D mathernogl::Transform::getTranslationComponent() const {
-  float divisor = transformMatrix.getAt(3, 3);
+  double divisor = transformMatrix.getAt(3, 3);
   if (divisor == 0) {
     return Vector3D(0);
   }

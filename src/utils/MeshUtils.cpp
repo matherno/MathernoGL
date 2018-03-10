@@ -52,7 +52,7 @@ void loadObj(std::string filePath, std::vector<int>* indices, std::vector<Vector
       }
     }
     else {
-      logWarning("No vertex normal data found in '" + filePath + "'!");
+//      logWarning("No vertex normal data found in '" + filePath + "'!");
       for (int vertexNum = 0; vertexNum < inVerts.size(); vertexNum += 3) {
         Vector3D normal(inVerts[vertexNum], inVerts[vertexNum + 1], inVerts[vertexNum + 2]);
         normal.makeUniform();
@@ -67,7 +67,7 @@ void loadObj(std::string filePath, std::vector<int>* indices, std::vector<Vector
       }
     }
     else {
-      logWarning("No vertex texture coordinate data found in '" + filePath + "'!");
+//      logWarning("No vertex texture coordinate data found in '" + filePath + "'!");
     }
 
     if(onlyFirstShape)
@@ -165,5 +165,48 @@ void createCube(float minX, float maxX, float minY, float maxY, float minZ, floa
   verts->push_back( { maxX, minY, maxZ });
   verts->push_back( { minX, minY, maxZ });
 }
+
+void createGrid(uint numCellsX, uint numCellsY, float cellSize, std::vector<Vector3D>* verts) {
+  for (int segNumX = 0; segNumX < numCellsX; segNumX++) {
+    for (int segNumY = 0; segNumY < numCellsY; segNumY++) {
+      const Vector3D topLeft = Vector3D(segNumX * cellSize, 0, segNumY * cellSize);
+      const Vector3D topRight = topLeft + Vector3D(cellSize, 0, 0);
+      const Vector3D bottomLeft = topLeft + Vector3D(0, 0, cellSize);
+      const Vector3D bottomRight = topLeft + Vector3D(cellSize, 0, cellSize);
+
+      verts->push_back(topLeft);
+      verts->push_back(bottomLeft);
+      verts->push_back(bottomRight);
+      verts->push_back(topLeft);
+      verts->push_back(bottomRight);
+      verts->push_back(topRight);
+    }
+  }
+}
+
+#define GET_HEIGHT(map, width, col, row) (*map)[(col) + (width) * (row)]
+
+void createGridHeightMapped(uint numCellsX, uint numCellsY, float cellSize, std::vector<float>* heightMap, std::vector<Vector3D>* verts) {
+  for (int segNumX = 0; segNumX < numCellsX; segNumX++) {
+    for (int segNumY = 0; segNumY < numCellsY; segNumY++) {
+      Vector3D topLeft = Vector3D(segNumX * cellSize, 0, segNumY * cellSize);
+      Vector3D topRight = topLeft + Vector3D(cellSize, 0, 0);
+      Vector3D bottomLeft = topLeft + Vector3D(0, 0, cellSize);
+      Vector3D bottomRight = topLeft + Vector3D(cellSize, 0, cellSize);
+
+      topLeft.y = GET_HEIGHT(heightMap, numCellsX+1, segNumX, segNumY);
+      topRight.y = GET_HEIGHT(heightMap, numCellsX+1, segNumX+1, segNumY);
+      bottomLeft.y = GET_HEIGHT(heightMap, numCellsX+1, segNumX, segNumY+1);
+      bottomRight.y = GET_HEIGHT(heightMap, numCellsX+1, segNumX+1, segNumY+1);
+
+      verts->push_back(topLeft);
+      verts->push_back(bottomLeft);
+      verts->push_back(bottomRight);
+      verts->push_back(topLeft);
+      verts->push_back(bottomRight);
+      verts->push_back(topRight);
+      }
+    }
+  }
 
 }

@@ -13,19 +13,19 @@ namespace mathernogl {
 Matrix4 matrixIdentity();
 
 Matrix4 matrixTranslate(const Vector3D& translation);
-Matrix4 matrixTranslate(const float x, const float y, const float z);
-Matrix4 matrixRotate(const Vector3D& rotationAxis, const float rotationAngle);
-Matrix4 matrixRotate(const float x, const float y, const float z, const float rotationAngle);
+Matrix4 matrixTranslate(double x, double y, double z);
+Matrix4 matrixRotate(const Vector3D& rotationAxis, double rotationAngle);
+Matrix4 matrixRotate(double x, double y, double z, double rotationAngle);
 Matrix4 matrixRotateBetween(const Vector3D& from, const Vector3D& to);
-Matrix4 matrixPitch(float angle);
-Matrix4 matrixYaw(float angle);
-Matrix4 matrixRoll(float angle);
+Matrix4 matrixPitch(double angle);
+Matrix4 matrixYaw(double angle);
+Matrix4 matrixRoll(double angle);
 Matrix4 matrixScale(const Vector3D& scaling);
-Matrix4 matrixScale(const float x, const float y, const float z);
-Matrix4 matrixScale(const float scaling);
+Matrix4 matrixScale(double x, double y, double z);
+Matrix4 matrixScale(double scaling);
 
-Matrix4 matrixPerspective(const float fov, const float aspectRatio, float zNearPLane, float zFarPlane);
-Matrix4 matrixOrthogonal(const float fov, const float aspectRatio, const float zFarPlane);
+Matrix4 matrixPerspective(double fov, double aspectRatio, double zNearPLane, double zFarPlane);
+Matrix4 matrixOrthogonal(double fov, double aspectRatio, double zFarPlane);
 
 Matrix4 matrixInverse(const Matrix4& matrix);
 
