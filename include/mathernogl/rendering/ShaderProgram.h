@@ -26,6 +26,7 @@ public:
 	void init(const std::string& vsFilePath, const std::string& fsFilePath);
 	void init(const std::string& vsFilePath, const std::string& tcsFilePath, const std::string& tesFilePath, const std::string& fsFilePath);
 	void init(const std::vector<Shader>& shaders);
+	void initFromSrc(const std::string& vertexShaderCode, const std::string& fragmentShaderCode);
 	void cleanUp();
 	void setVarFloat(const std::string& name, float value, bool optional = false);
 	void setVarInt(const std::string& name, int value, bool optional = false);

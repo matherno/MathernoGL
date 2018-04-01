@@ -1,4 +1,6 @@
 #include <mathernogl/utils/FileIO.h>
+#include <dirent.h>
+#include <set>
 
 namespace mathernogl {
 
@@ -28,6 +30,45 @@ void appendTextFile(std::string filePath, std::string text) {
 	std::ofstream textFile(filePath.c_str(), std::ios_base::app);
 	textFile << text;
 	textFile.close();
+}
+
+void getFilesInDirectory(const std::string& directoryPath, std::list<std::string>* files, const std::string& extension)
+  {
+  std::set<std::string> filesSet;
+  DIR* directory;
+  struct dirent* ent;
+  if ((directory = opendir(directoryPath.c_str())) != nullptr)
+    {
+    while ((ent = readdir(directory)) != nullptr)
+      {
+      std::string fileName = ent->d_name;
+      if (fileName == "." || fileName == "..")
+        continue;
+
+      if (!extension.empty() && getFileExtension(fileName) != extension)
+        continue;
+
+      filesSet.insert(fileName);
+      }
+    closedir(directory);
+    }
+
+  for (const std::string& file : filesSet)
+    files->push_back(file);
+  }
+
+std::string removeFileExtension(const std::string& filePath){
+  size_t idx = filePath.find_last_of('.');
+  if (idx != std::string::npos)
+    return filePath.substr(0, idx);
+  return filePath;
+}
+
+std::string getFileExtension(const std::string& filePath){
+  size_t idx = filePath.find_last_of('.');
+  if (idx != std::string::npos)
+    return filePath.substr(idx + 1);
+  return "";
 }
 
 }

@@ -1,4 +1,5 @@
 #include <mathernogl/texture/TextureFactory.h>
+#include <memory>
 
 namespace mathernogl {
 
@@ -12,7 +13,7 @@ Texture* createTextureFromFile(const std::string& filePath, bool genMipMaps) {
 Texture* createTextureFromFile(const std::string& filePath, bool genMipMaps, TextureFiltering filtering, TextureWrapping wrapping) {
 	Texture* texture = nullptr;
 	try{
-		ImageData* imageData = loadImage(filePath);
+		std::unique_ptr<ImageData> imageData(loadImage(filePath));
 
 		unsigned int glTexType = GL_TEXTURE_2D;
 		unsigned int glTexID;
@@ -37,7 +38,11 @@ Texture* createTextureFromFile(const std::string& filePath, bool genMipMaps, Tex
 			setupMipmapping(glTexType, -0.7);
 		}
 		glBindTexture(glTexType, 0);
-		texture = new Texture(glTexID, glTexType);
+
+		texture = new Texture(glTexID, glTexType, imageData->width, imageData->height, imageData->bytesPerPixel);
+    const unsigned int numBytes = imageData->width * imageData->height * imageData->bytesPerPixel;
+    texture->bytes.reset(new byte[numBytes]);
+    std::memcpy(texture->bytes.get(), imageData->byteMap, numBytes);
 	}
 	catch(const std::runtime_error& e){
 		std::string error = e.what();
@@ -46,7 +51,30 @@ Texture* createTextureFromFile(const std::string& filePath, bool genMipMaps, Tex
 	return texture;
 }
 
-void setupFilteringWrapping(unsigned int textureType, TextureFiltering filtering, TextureWrapping wrapping){
+Texture* createEmptyTexture(uint width, uint height, TextureFiltering filtering, TextureWrapping wrapping){
+  const unsigned int bytesPerPixel = 3;
+  const unsigned int numBytes = width * height * bytesPerPixel;
+  std::unique_ptr<byte> bytes(new byte[numBytes]);
+  std::fill(bytes.get(), bytes.get() + numBytes, 0);
+
+  unsigned int glTexType = GL_TEXTURE_2D;
+  unsigned int glTexID;
+  glGenTextures(1, &glTexID);
+  glBindTexture(glTexType, glTexID);
+  setupFilteringWrapping(glTexType, filtering, wrapping);
+  glTexImage2D(glTexType, 0, GL_RGB, (GLsizei) width, (GLsizei) height, 0, GL_RGB, GL_UNSIGNED_BYTE, bytes.get());
+  glBindTexture(glTexType, 0);
+  Texture* texture = new Texture(glTexID, glTexType, width, height, bytesPerPixel);
+  texture->bytes = std::move(bytes);
+  return texture;
+}
+
+void updateTexture(Texture* texture) {
+  glBindTexture(texture->glTexType, texture->glTexID);
+  glTexSubImage2D(texture->glTexType, 0, 0, 0, texture->width, texture->height, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*)texture->bytes.get());
+}
+
+  void setupFilteringWrapping(unsigned int textureType, TextureFiltering filtering, TextureWrapping wrapping){
 	int glFiltering = GL_LINEAR;
 	switch(filtering){
 		case LINEAR:

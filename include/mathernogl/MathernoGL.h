@@ -17,6 +17,7 @@
 #include <mathernogl/texture/TextureBindingsManager.h>
 
 #include <mathernogl/rendering/ShaderProgram.h>
+#include <mathernogl/rendering/ScreenTextureRenderer.h>
 
 #include <mathernogl/systemio/Window.h>
 #include <mathernogl/systemio/InputHandler.h>

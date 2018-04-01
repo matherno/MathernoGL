@@ -20,5 +20,7 @@ enum TextureWrapping {
 
 Texture* createTextureFromFile(const std::string& filePath, bool genMipMaps);
 Texture* createTextureFromFile(const std::string& filePath, bool genMipMaps, TextureFiltering filtering, TextureWrapping wrapping);
+Texture* createEmptyTexture(uint width, uint height, TextureFiltering filtering = LINEAR, TextureWrapping wrapping = REPEAT);
+void updateTexture(Texture* texture);
 
 }

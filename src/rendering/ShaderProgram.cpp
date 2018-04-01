@@ -31,6 +31,22 @@ void ShaderProgram::init(const std::string &vsFilePath, const std::string &tcsFi
     init({Shader(GL_VERTEX_SHADER, vsFilePath), Shader(GL_TESS_CONTROL_SHADER, tcsFilePath), Shader(GL_TESS_EVALUATION_SHADER, tesFilePath), Shader(GL_FRAGMENT_SHADER, fsFilePath)});
 }
 
+void ShaderProgram::initFromSrc(const std::string& vertexShaderCode, const std::string& fragmentShaderCode){
+  std::vector<unsigned int> glShaderIDs;
+  try {
+    glShaderIDs.push_back(createShader(GL_VERTEX_SHADER, vertexShaderCode));
+    glShaderIDs.push_back(createShader(GL_FRAGMENT_SHADER, fragmentShaderCode));
+    this->glID = createProgram(glShaderIDs);
+    for(GLuint id : glShaderIDs){
+      glDeleteShader(id);
+    }
+  }
+  catch (const std::runtime_error& e) {
+    std::string errorMsg = e.what();
+    throw std::runtime_error("Failed to load shader program. " + errorMsg);
+  }
+}
+
 unsigned int ShaderProgram::createShader(GLuint glType, const std::string& shaderSrc) {
 	//load and compile shader into openGL
 	GLuint glShaderID = glCreateShader(glType);

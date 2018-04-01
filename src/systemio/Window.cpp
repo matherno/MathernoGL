@@ -108,4 +108,8 @@ void Window::setClearColour(float r, float g, float b, float a) {
     glClearColor(r, g, b, a);
 }
 
+void Window::close() {
+    glfwDestroyWindow(window);
+}
+
 }

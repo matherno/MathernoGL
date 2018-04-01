@@ -24,7 +24,8 @@ public:
 	Window();
 
 	void create(uint windowWidth, uint windowHeight, std::string windowName, bool fullscreen, bool antiAliasing);
-    void clear() const;
+  void close();
+  void clear() const;
 	void update() const;
 	bool isOpen() const;
 	GLFWwindow* getGLFWWindow() const { return window; }
