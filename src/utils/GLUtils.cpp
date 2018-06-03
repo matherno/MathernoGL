@@ -7,7 +7,7 @@
 
 namespace mathernogl{
 
-Window* initGL(std::string windowName, uint windowWidth, uint windowHeight, bool fullScreen, bool antiAliasing) {
+Window* initGL(std::string windowName, uint windowWidth, uint windowHeight, bool fullScreen, bool antiAliasing, bool enableSRGB) {
     Window *window = new Window();
 
     resetLog();
@@ -16,7 +16,7 @@ Window* initGL(std::string windowName, uint windowWidth, uint windowHeight, bool
         throw std::runtime_error("MathernoGL: Couldn't initialise GLFW");
     }
     else {
-        window->create(windowWidth, windowHeight, windowName, fullScreen, antiAliasing);
+        window->create(windowWidth, windowHeight, windowName, fullScreen, antiAliasing, enableSRGB);
         glewExperimental = GL_TRUE;
         if (glewInit() != GLEW_OK) {
             logError("GLEW couldn't initialise. ");

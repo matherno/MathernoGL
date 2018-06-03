@@ -133,12 +133,10 @@ void InputHandler::processKey(int key, int glfwAction) {
         heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(), key), heldKeys.end());
     }
 
-    if(glfwAction != GLFW_REPEAT) {
-        KeyEvent keyEvent;
-        keyEvent.action = (InputAction) glfwAction;
-        keyEvent.key = key;
-        keyEvents.push_back(keyEvent);
-    }
+    KeyEvent keyEvent;
+    keyEvent.action = (InputAction) glfwAction;
+    keyEvent.key = key;
+    keyEvents.push_back(keyEvent);
 }
 
 //called by the callback functions to process a mouse button event

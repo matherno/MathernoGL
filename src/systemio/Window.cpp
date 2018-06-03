@@ -13,13 +13,14 @@ Window::Window() {
 
 //will attempt to create a window with given dimensions and name
 //throws runtime_error exceptions if fails
-void Window::create(uint windowWidth, uint windowHeight, std::string windowName, bool fullscreen, bool antiAliasing) {
+void Window::create(uint windowWidth, uint windowHeight, std::string windowName, bool fullscreen, bool antiAliasing, bool enableSRGB) {
 	glfwSetTime(0.0);
 
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_RESIZABLE, 0);
+  glfwWindowHint(GLFW_SRGB_CAPABLE, GL_TRUE);
 
 	if (antiAliasing) {
 		glfwWindowHint(GLFW_SAMPLES, 4);
@@ -39,6 +40,10 @@ void Window::create(uint windowWidth, uint windowHeight, std::string windowName,
 	glfwMakeContextCurrent(window);
 
 	glfwSwapInterval(0);
+  if (enableSRGB)
+    glEnable(GL_FRAMEBUFFER_SRGB);
+
+  glEnable(GL_MULTISAMPLE);
 }
 
 //clears the colour and depth buffers of the window

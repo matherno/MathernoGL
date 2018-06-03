@@ -4,6 +4,7 @@
 //
 
 #include <chrono>
+#include <iostream>
 
 namespace mathernogl{
 
@@ -21,6 +22,14 @@ static long getTimeUS(){
     system_clock::now().time_since_epoch()
   );
   return us.count();
+}
+
+template<typename ... Args>
+static std::string stringFormat(const std::string& format, Args ... args){
+  int bufferSize = snprintf(nullptr, 0, format.c_str(), args ...) + 1;
+  char* buffer = new char[bufferSize];
+  snprintf(buffer, bufferSize, format.c_str(), args ...);
+  return std::string(buffer, buffer + bufferSize - 1);
 }
 
 }

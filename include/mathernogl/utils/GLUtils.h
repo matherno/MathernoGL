@@ -14,7 +14,7 @@ namespace mathernogl {
  * initialises glew and glfw and creates a window with the given parameters
  * window must be destroyed and memory freed once finished with
  */
-Window *initGL(std::string windowName, uint windowWidth, uint windowHeight, bool fullScreen = false, bool antiAliasing = false);
+Window *initGL(std::string windowName, uint windowWidth, uint windowHeight, bool fullScreen = false, bool antiAliasing = false, bool enableSRGB = false);
 
 /*
  * sets the state of alpha blending

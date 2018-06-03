@@ -21,7 +21,8 @@ enum CursorMode {
 enum InputAction{
     INPUT_HELD = 9,
     INPUT_PRESSED = GLFW_PRESS,
-    INPUT_RELEASED = GLFW_RELEASE
+    INPUT_RELEASED = GLFW_RELEASE,
+    INPUT_REPEATED = GLFW_REPEAT,
 };
 
 struct KeyEvent {

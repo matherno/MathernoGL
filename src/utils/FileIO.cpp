@@ -71,4 +71,14 @@ std::string getFileExtension(const std::string& filePath){
   return "";
 }
 
+std::string getDirectoryFromPath(const std::string& filePath) {
+  size_t idx = filePath.find_last_of('/');
+  if (idx == std::string::npos)
+    idx = filePath.find_last_of('\\');
+
+  if (idx != std::string::npos)
+    return filePath.substr(0, idx + 1);   // include the '/' at the end
+  return "";
+}
+
 }

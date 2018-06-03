@@ -33,7 +33,6 @@ static const std::string fragmentShader =
   "   outputColour = texture(inTexture, texCoords);\n"
   "}";
 
-static const uint textureBoundLocation = 4;
 
 namespace mathernogl
   {

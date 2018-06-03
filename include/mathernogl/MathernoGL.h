@@ -18,6 +18,7 @@
 
 #include <mathernogl/rendering/ShaderProgram.h>
 #include <mathernogl/rendering/ScreenTextureRenderer.h>
+#include <mathernogl/rendering/FrameBuffer.h>
 
 #include <mathernogl/systemio/Window.h>
 #include <mathernogl/systemio/InputHandler.h>

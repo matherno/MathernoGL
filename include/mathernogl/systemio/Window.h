@@ -23,7 +23,7 @@ private:
 public:
 	Window();
 
-	void create(uint windowWidth, uint windowHeight, std::string windowName, bool fullscreen, bool antiAliasing);
+	void create(uint windowWidth, uint windowHeight, std::string windowName, bool fullscreen, bool antiAliasing, bool enableSRGB = false);
   void close();
   void clear() const;
 	void update() const;

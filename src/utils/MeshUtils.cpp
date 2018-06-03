@@ -25,15 +25,18 @@ void loadObj(std::string filePath, std::vector<int>* indices, std::vector<Vector
   norms->clear();
   texCoords->clear();
 
+  long vertexIdxOffset = 0;
   for(int shapeNum = 0; shapeNum < shapes.size(); ++shapeNum) {
     std::vector<uint>& inIndices = shapes[shapeNum].mesh.indices;
     std::vector<float>& inVerts = shapes[shapeNum].mesh.positions;
     std::vector<float>& inNorms = shapes[shapeNum].mesh.normals;
     std::vector<float>& inTexCoords = shapes[shapeNum].mesh.texcoords;
 
+    vertexIdxOffset = verts->size();
+
     //  vertex indices
     for (uint vertexIndex : inIndices) {
-      indices->emplace_back(vertexIndex);
+      indices->emplace_back(vertexIndex + vertexIdxOffset);
     }
 
     //  vertex positions

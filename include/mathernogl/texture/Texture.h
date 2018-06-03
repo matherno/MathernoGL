@@ -14,10 +14,11 @@ public:
   const uint width;
   const uint height;
   const uint bytesPerPixel;
+  const bool rgbFormat;     // bytes format is either RGB(A) or BGR(A)
   std::unique_ptr<byte> bytes;
 
-  Texture(uint glTexID, uint glTexType, uint width, uint height, uint bytesPerPixel)
-    : glTexID(glTexID), glTexType(glTexType), width(width), height(height), bytesPerPixel(bytesPerPixel) {}
+  Texture(uint glTexID, uint glTexType, uint width, uint height, uint bytesPerPixel, bool rgbFormat)
+    : glTexID(glTexID), glTexType(glTexType), width(width), height(height), bytesPerPixel(bytesPerPixel), rgbFormat(rgbFormat) {}
 	void cleanUp();
 };
 
