@@ -8,11 +8,20 @@
 #include <mathernogl/utils/GLUtils.h>
 #include <mathernogl/Assert.h>
 
+#define MAX_COL_OUTPUTS 8
+
 enum TextureTypes
   {
-  textureColour = 0,
-  textureDepth,
-//  textureStencil,
+  textureDepth = 0,
+  textureStencil,
+  textureColour0,
+  textureColour1,
+  textureColour2,
+  textureColour3,
+  textureColour4,
+  textureColour5,
+  textureColour6,
+  textureColour7,
   numTextureTypes,
   };
 
@@ -37,7 +46,7 @@ bool checkFBOStatus()
   return false;
   }
 
-bool mathernogl::FrameBuffer::initialise(uint width, uint height, bool needAlphaChannel, bool useDepthTexture, bool gammaCorrect)
+bool mathernogl::FrameBuffer::initialise(uint width, uint height, bool needAlphaChannel, bool useDepthTexture, bool gammaCorrect, int numColourOutputs)
   {
   fboWidth = width;
   fboHeight = height;
@@ -64,29 +73,41 @@ bool mathernogl::FrameBuffer::initialise(uint width, uint height, bool needAlpha
     }
   ASSERT_NO_GL_ERROR();
 
-  clearGLErrors();
-  TextureOptions textureOptions;
-  textureOptions.gammaCorrect = gammaCorrect;
-  textureOptions.genMipMaps = false;
-  textureOptions.wrapping = REPEAT;
-  textureOptions.filtering = NEAREST;
-  textures[textureColour].reset(createEmptyTexture(width, height, needAlphaChannel ? 4 : 3, textureOptions));
-  ASSERT_NO_GL_ERROR();
+  std::vector<GLenum> colourAttachments;
+  for (int colAttachment = 0; colAttachment < std::min(numColourOutputs, MAX_COL_OUTPUTS); ++colAttachment)
+    {
+    const int textureID = textureColour0 + colAttachment;
+    clearGLErrors();
+    TextureOptions textureOptions;
+    textureOptions.gammaCorrect = gammaCorrect;
+    textureOptions.genMipMaps = false;
+    textureOptions.wrapping = REPEAT;
+    textureOptions.filtering = NEAREST;
+    textures[textureID].reset(createEmptyTexture(width, height, needAlphaChannel ? 4 : 3, textureOptions));
+    ASSERT_NO_GL_ERROR();
 
-  clearGLErrors();
-  if (textures[textureColour])
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textures[textureColour]->glTexType, textures[textureColour]->glTexID, 0);
-  ASSERT_NO_GL_ERROR();
+    clearGLErrors();
+    if (textures[textureID])
+      {
+      GLenum attachment = (GLenum) (GL_COLOR_ATTACHMENT0 + colAttachment);
+      colourAttachments.push_back(attachment);
+      glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textures[textureID]->glTexType, textures[textureID]->glTexID, 0);
+      }
+    ASSERT_NO_GL_ERROR();
+    }
 
   bool success = false;
-  if (textures[textureColour] && (!useDepthTexture || textures[textureDepth]))
+  if ((numColourOutputs > 0 && textures[textureColour0]) && (!useDepthTexture || textures[textureDepth]))
+    {
+    glDrawBuffers((GLsizei) colourAttachments.size(), colourAttachments.data());
     success = checkFBOStatus();
+    }
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   return success;
   }
 
-bool mathernogl::FrameBuffer::initialiseMultisampled(uint width, uint height, uint numSamples, bool gammaCorrect)
+bool mathernogl::FrameBuffer::initialiseMultisampled(uint width, uint height, uint numSamples, bool gammaCorrect, int numColourOutputs)
   {
   fboWidth = width;
   fboHeight = height;
@@ -104,15 +125,50 @@ bool mathernogl::FrameBuffer::initialiseMultisampled(uint width, uint height, ui
   glBindRenderbuffer(GL_RENDERBUFFER, 0);
   ASSERT_NO_GL_ERROR();
 
-  clearGLErrors();
-  bool success = false;
-  textures[textureColour].reset(createMultiSampleTexture(width, height, numSamples, gammaCorrect));
-  if (textures[textureColour])
+  bool success = true;
+  std::vector<GLenum> colourAttachments;
+  for (int colAttachment = 0; colAttachment < std::min(numColourOutputs, MAX_COL_OUTPUTS); ++colAttachment)
     {
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textures[textureColour]->glTexType, textures[textureColour]->glTexID, 0);
+    const int textureID = textureColour0 + colAttachment;
+    clearGLErrors();
+    textures[textureID].reset(createMultiSampleTexture(width, height, numSamples, gammaCorrect));
+    GLenum attachment = (GLenum) (GL_COLOR_ATTACHMENT0 + colAttachment);
+    colourAttachments.push_back(attachment);
+    if (textures[textureID])
+      glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textures[textureID]->glTexType, textures[textureID]->glTexID, 0);
+    else
+      success = false;
+    ASSERT_NO_GL_ERROR();
+    }
+
+  if (success)
+    {
+    glDrawBuffers((GLsizei) colourAttachments.size(), colourAttachments.data());
     success = checkFBOStatus();
     }
+
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  return success;
+  }
+
+bool mathernogl::FrameBuffer::initialiseForShadowMapping(uint width, uint height)
+  {
+  fboWidth = width;
+  fboHeight = height;
+  clearGLErrors();
+  glGenFramebuffers(1, &fboID);
+  glBindFramebuffer(GL_FRAMEBUFFER, fboID);
   ASSERT_NO_GL_ERROR();
+
+  clearGLErrors();
+  textures[textureDepth].reset(createShadowMapDepthTexture(width, height));
+  if (textures[textureDepth])
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, textures[textureDepth]->glTexType, textures[textureDepth]->glTexID, 0);
+  ASSERT_NO_GL_ERROR();
+
+  bool success = false;
+  if (textures[textureDepth])
+    success = checkFBOStatus();
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   return success;
@@ -123,9 +179,9 @@ void mathernogl::FrameBuffer::cleanUp()
   glDeleteFramebuffers(1, &fboID);
   }
 
-const std::shared_ptr<mathernogl::Texture> mathernogl::FrameBuffer::getColourTexture() const
+const std::shared_ptr<mathernogl::Texture> mathernogl::FrameBuffer::getColourTexture(int idx) const
   {
-  return textures[textureColour];
+  return textures[textureColour0 + idx];
   }
 
 const std::shared_ptr<mathernogl::Texture> mathernogl::FrameBuffer::getDepthTexture() const
@@ -157,9 +213,10 @@ void mathernogl::FrameBuffer::blitToFBO(mathernogl::FrameBuffer* fbo, bool inclu
 
   glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo->getGLID());
   glBindFramebuffer(GL_READ_FRAMEBUFFER, fboID);
-  glDrawBuffer(GL_BACK);
+//  glDrawBuffer(GL_BACK);
   glBlitFramebuffer(0, 0, fboWidth, fboHeight, 0, 0, fbo->getWidth(), fbo->getHeight(), buffersToBlit, GL_NEAREST);
   glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
   glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
   }
+
 

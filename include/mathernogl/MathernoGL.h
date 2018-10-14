@@ -5,6 +5,7 @@
 
 #include <mathernogl/data/GPUBuffer.h>
 #include <mathernogl/data/GPUBufferStatic.h>
+#include <mathernogl/data/GPUBufferDynamic.h>
 #include <mathernogl/data/VertexArray.h>
 
 #include <mathernogl/world/CameraController.h>

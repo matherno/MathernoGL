@@ -62,6 +62,19 @@ Texture* createMultiSampleTexture(uint width, uint height, uint numSamples, bool
   return new Texture(glTexID, glTexType, width, height, 0, true);
 }
 
+Texture* createShadowMapDepthTexture(uint width, uint height)
+  {
+  unsigned int glTexType = GL_TEXTURE_2D;
+  unsigned int glTexID;
+  glGenTextures(1, &glTexID);
+  glBindTexture(glTexType, glTexID);
+  glTexStorage2D(glTexType, 1, GL_DEPTH_COMPONENT32, (GLsizei)width, (GLsizei)height);
+  setupFilteringWrapping(glTexType, LINEAR, CLAMP_EDGE);
+  glTexParameteri(glTexType, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+  glTexParameteri(glTexType, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+  return new Texture(glTexID, glTexType, width, height, 0, true);
+  }
+
 uint getGLBytesFormat(uint bytesPerPixel, bool rgbFormat){
   switch (bytesPerPixel){
     case 3:
@@ -95,8 +108,6 @@ uint createGLTexture(uint glTexType, uint width, uint height, uint bytesPerPixel
   glBindTexture(glTexType, 0);
   return glTexID;
 }
-
-
 
 void setupFilteringWrapping(unsigned int textureType, TextureFiltering filtering, TextureWrapping wrapping){
 	int glFiltering = GL_LINEAR;

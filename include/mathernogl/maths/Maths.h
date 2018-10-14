@@ -13,3 +13,4 @@
 #include <mathernogl/maths/Transform.h>
 #include <mathernogl/maths/Transformation.h>
 #include <mathernogl/maths/Arithmetic.h>
+#include <mathernogl/maths/GeometricOperations.h>

@@ -17,7 +17,6 @@ bool compareFloat(float a, float b, unsigned int maxUlps = 1);
 double clampd(double value, double min, double max);
 float clampf(float value, float min, float max);
 int clampi(int value, int min, int max);
-double ccwAngleBetween(const Vector2D& first, const Vector2D& second);
-Vector3D lerpVector3D(const Vector3D& first, const Vector3D& second, double factor);
+
 
 }

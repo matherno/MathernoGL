@@ -23,4 +23,7 @@ double angleBetween(const Vector4D& vector1, const Vector4D& vector2);
 //returns the reflection of the given vector around the given normal
 Vector3D reflect(const Vector3D& vector, const Vector3D& normal);
 
+double ccwAngleBetween(const Vector2D& first, const Vector2D& second);
+Vector3D lerpVector3D(const Vector3D& first, const Vector3D& second, double factor);
+
 }

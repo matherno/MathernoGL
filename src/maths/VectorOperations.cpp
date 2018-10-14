@@ -36,4 +36,22 @@ Vector3D reflect(const Vector3D& vector, const Vector3D& normal) {
 }
 
 
-}
+double ccwAngleBetween(const Vector2D& first, const Vector2D& second) {
+  Vector2D f = first;
+  Vector2D s = second;
+  f.makeUniform();
+  s.makeUniform();
+  double dotProduct = f.x*s.x + f.y*s.y;
+  double determinant = f.x*s.y - f.y*s.x;
+  double angle = atan2(determinant, dotProduct);
+  return -1.0f * (float)radToDeg(angle);
+  }
+
+Vector3D lerpVector3D(const Vector3D& first, const Vector3D& second, double factor){
+  factor = clampd(factor, 0, 1);
+  return (first * (1.0f-factor)) + (second * factor);
+  }
+
+
+
+  }

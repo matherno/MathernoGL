@@ -5,6 +5,7 @@
 
 #include <chrono>
 #include <iostream>
+#include <cmath>
 
 namespace mathernogl{
 
@@ -31,6 +32,19 @@ static std::string stringFormat(const std::string& format, Args ... args){
   snprintf(buffer, bufferSize, format.c_str(), args ...);
   return std::string(buffer, buffer + bufferSize - 1);
 }
+
+static const long msInSec = 1000;
+static const long msInMin = msInSec * 60;
+static const long msInHour = msInMin * 60;
+
+static std::string formatTime(uint timeMS)
+  {
+  const long ms = timeMS % 1000;
+  const long s = (long) floor((double) timeMS / msInSec) % 60;
+  const long m = (long) floor((double) timeMS / msInMin) % 60;
+  const long h = (long) floor((double) timeMS / msInHour);
+  return std::to_string(h) + ":" + std::to_string(m) + ":" + std::to_string(s) + ":" + std::to_string(ms);
+  }
 
 }
 

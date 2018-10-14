@@ -44,6 +44,7 @@ void Window::create(uint windowWidth, uint windowHeight, std::string windowName,
     glEnable(GL_FRAMEBUFFER_SRGB);
 
   glEnable(GL_MULTISAMPLE);
+  glViewport(0, 0, windowWidth, windowHeight);
 }
 
 //clears the colour and depth buffers of the window
