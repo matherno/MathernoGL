@@ -31,6 +31,7 @@ public:
 	void setVarFloat(const std::string& name, float value, bool optional = false);
 	void setVarInt(const std::string& name, int value, bool optional = false);
 	void setVarIntArray(const std::string& name, int index, int value, bool optional = false);
+	void setVarVec3Array(const std::string& name, int index, const Vector3D& value, bool optional = false);
 	void setVarVec2(const std::string& name, const Vector2D &value, bool optional = false);
 	void setVarVec3(const std::string& name, const Vector3D &value, bool optional = false);
 	void setVarVec4(const std::string& name, const Vector4D &value, bool optional = false);

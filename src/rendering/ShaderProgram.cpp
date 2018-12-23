@@ -152,6 +152,14 @@ void ShaderProgram::setVarIntArray(const std::string& name, int index, int value
   glUniform1i(getUniformLocation(constructArrayName(name, index)), value);
 }
 
+
+void ShaderProgram::setVarVec3Array(const std::string& name, int index, const Vector3D& value, bool optional) {
+  if (optional && !hasUniformVariable(name))
+    return;
+  glUniform3f(getUniformLocation(constructArrayName(name, index)), value.x, value.y, value.z);
+}
+
+
 //must enable shader program before performing this operation
 void ShaderProgram::setVarVec2(const std::string &name, const Vector2D &value, bool optional) {
   if (optional && !hasUniformVariable(name))
@@ -202,5 +210,6 @@ int ShaderProgram::getUniformLocation(const std::string& name) {
     }
     return glUniformID;
 }
+
 
 }

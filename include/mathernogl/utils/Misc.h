@@ -6,6 +6,8 @@
 #include <chrono>
 #include <iostream>
 #include <cmath>
+#include <vector>
+#include <sstream>
 
 namespace mathernogl{
 
@@ -44,6 +46,16 @@ static std::string formatTime(uint timeMS)
   const long m = (long) floor((double) timeMS / msInMin) % 60;
   const long h = (long) floor((double) timeMS / msInHour);
   return std::to_string(h) + ":" + std::to_string(m) + ":" + std::to_string(s) + ":" + std::to_string(ms);
+  }
+
+static std::vector<std::string> stringSplit(std::string stringToSplit, char delimiter)
+  {
+  std::stringstream stream(stringToSplit);
+  std::string item;
+  std::vector<std::string> splitStrings;
+  while (std::getline(stream, item, delimiter))
+    splitStrings.push_back(item);
+  return splitStrings;
   }
 
 }

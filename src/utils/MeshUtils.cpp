@@ -4,6 +4,8 @@
 
 #include <mathernogl/utils/Logging.h>
 #include <mathernogl/utils/MeshUtils.h>
+#include <mathernogl/utils/Misc.h>
+#include <set>
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
@@ -11,12 +13,13 @@
 namespace mathernogl {
 
 
-void loadObj(std::string filePath, std::vector<int>* indices, std::vector<Vector3D>* verts, std::vector<Vector3D>* norms, std::vector<Vector2D>* texCoords, bool onlyFirstShape /*= true*/) {
+void loadObj(std::string filePath, std::vector<int>* indices, std::vector<Vector3D>* verts, std::vector<Vector3D>* norms, std::vector<Vector2D>* texCoords, std::vector<Vector3D>* faceCols /*= nullptr*/, bool onlyFirstShape /*= true*/) {
   std::vector<tinyobj::shape_t> shapes;
   std::vector<tinyobj::material_t> materials;
   std::string error;
 
-  if (!tinyobj::LoadObj(shapes, materials, error, filePath.c_str())) {
+  std::string objDirectory = mathernogl::getDirectoryFromPath(filePath);
+  if (!tinyobj::LoadObj(shapes, materials, error, filePath.c_str(), objDirectory.c_str())) {
     throw std::runtime_error("Couldn't load obj at '" + filePath + "' ");
   }
 
@@ -24,6 +27,8 @@ void loadObj(std::string filePath, std::vector<int>* indices, std::vector<Vector
   verts->clear();
   norms->clear();
   texCoords->clear();
+  if (faceCols)
+    faceCols->clear();
 
   long vertexIdxOffset = 0;
   for(int shapeNum = 0; shapeNum < shapes.size(); ++shapeNum) {
@@ -31,6 +36,7 @@ void loadObj(std::string filePath, std::vector<int>* indices, std::vector<Vector
     std::vector<float>& inVerts = shapes[shapeNum].mesh.positions;
     std::vector<float>& inNorms = shapes[shapeNum].mesh.normals;
     std::vector<float>& inTexCoords = shapes[shapeNum].mesh.texcoords;
+    std::vector<int>& inMaterials = shapes[shapeNum].mesh.material_ids;
 
     vertexIdxOffset = verts->size();
 
@@ -71,6 +77,20 @@ void loadObj(std::string filePath, std::vector<int>* indices, std::vector<Vector
     }
     else {
 //      logWarning("No vertex texture coordinate data found in '" + filePath + "'!");
+    }
+
+    if (faceCols && !inMaterials.empty()) {
+      for (int materialNum : inMaterials) {
+        if (materialNum >= 0 && materialNum < materials.size())
+          {
+          auto material = materials[materialNum];
+          faceCols->emplace_back(material.diffuse[0], material.diffuse[1], material.diffuse[2]);
+          }
+        else
+          {
+          faceCols->emplace_back(0, 0, 0);
+          }
+      }
     }
 
     if(onlyFirstShape)
@@ -212,4 +232,96 @@ void createGridHeightMapped(uint numCellsX, uint numCellsY, float cellSize, std:
     }
   }
 
+
+#define MGV_IDENTIFIER "mgv"
+#define MGV_COLOURS "colour"
+#define MGV_VOXELS "voxels"
+
+void loadVoxelMGVFile(const std::string& filePath, std::vector<Vector3D>* colours, std::vector<VoxelPoint>* voxels, bool includeInteriorVoxels)
+  {
+  std::ifstream infile(filePath);
+  std::string line;
+  if (!std::getline(infile, line))
+    {
+    mathernogl::logWarning("Can not read file: " + filePath);
+    return;
+    }
+
+  if (line != MGV_IDENTIFIER)
+    {
+    mathernogl::logWarning("Unrecognised voxel file: " + filePath);
+    return;
+    }
+
+  std::getline(infile, line); //  version num (don't need atm)
+
+  std::list<VoxelPoint> unfilteredVoxels;
+  std::set<std::tuple<int, int, int>> voxelSet;
+
+  bool readingColours = true;
+  while(std::getline(infile, line))
+    {
+    if (line.empty())
+      continue;
+    if (line == MGV_COLOURS)
+      continue;
+    if (line == MGV_VOXELS)
+      {
+      readingColours = false;
+      continue;
+      }
+
+    if (readingColours)
+      {
+      std::vector<std::string> splits = stringSplit(line, ',');
+      if (splits.size() >= 3)
+        {
+        int r = atoi(splits[0].c_str());
+        int g = atoi(splits[1].c_str());
+        int b = atoi(splits[2].c_str());
+        colours->emplace_back((double)r / 255.0, (double)g / 255.0, (double)b / 255.0);
+        }
+      }
+    else
+      {
+      std::vector<std::string> splits = stringSplit(line, ',');
+      if (splits.size() >= 4)
+        {
+        int x = atoi(splits[0].c_str());
+        int y = atoi(splits[1].c_str());
+        int z = atoi(splits[2].c_str());
+        int col = atoi(splits[3].c_str());
+        if (voxelSet.count(std::make_tuple(x, y, z)) == 0)
+          {
+          if (!includeInteriorVoxels)
+            unfilteredVoxels.emplace_back(x, y, z, col);
+          else
+            voxels->emplace_back(x, y, z, col);
+          voxelSet.insert(std::make_tuple(x, y, z));
+          }
+        }
+      }
+    }
+
+  if (!includeInteriorVoxels)
+    {
+    for (VoxelPoint voxel : unfilteredVoxels)
+      {
+      int adjacentVoxels = 0;
+      for (VoxelPoint voxel2 : unfilteredVoxels)
+        {
+        const int distanceAway = abs(voxel.x - voxel2.x) + abs(voxel.y - voxel2.y) + abs(voxel.z - voxel2.z);
+        if (distanceAway == 1)
+          ++adjacentVoxels;
+        }
+      if (adjacentVoxels < 6)
+        voxels->emplace_back(voxel);
+      }
+    }
+  }
+
+
+
 }
+
+
