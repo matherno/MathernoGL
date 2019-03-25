@@ -2,11 +2,11 @@
 // Created by matt on 26/05/18.
 //
 
-#include "mathernogl/rendering/FrameBuffer.h"
-#include <mathernogl/utils/Logging.h>
-#include <mathernogl/texture/TextureFactory.h>
-#include <mathernogl/utils/GLUtils.h>
-#include <mathernogl/Assert.h>
+#include "rendering/FrameBuffer.h"
+#include <utils/Logging.h>
+#include <texture/TextureFactory.h>
+#include <utils/GLUtils.h>
+#include <Assert.h>
 
 #define MAX_COL_OUTPUTS 8
 

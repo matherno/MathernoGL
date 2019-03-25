@@ -1,4 +1,4 @@
-#include <mathernogl/data/GPUBufferStatic.h>
+#include <data/GPUBufferStatic.h>
 
 namespace mathernogl {
 

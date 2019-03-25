@@ -1,4 +1,4 @@
-#include <mathernogl/maths/RaycastOperations.h>
+#include <maths/RaycastOperations.h>
 
 namespace mathernogl {
 

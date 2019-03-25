@@ -1,4 +1,4 @@
-#include <mathernogl/texture/TextureBindingsManager.h>
+#include <texture/TextureBindingsManager.h>
 
 namespace mathernogl {
 

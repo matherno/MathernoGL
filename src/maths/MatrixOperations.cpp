@@ -1,5 +1,5 @@
-#include <mathernogl/maths/MatrixOperations.h>
-#include <mathernogl/maths/Arithmetic.h>
+#include <maths/MatrixOperations.h>
+#include <maths/Arithmetic.h>
 
 namespace mathernogl {
 

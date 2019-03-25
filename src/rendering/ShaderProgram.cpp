@@ -1,5 +1,5 @@
-#include <mathernogl/rendering/ShaderProgram.h>
-#include <mathernogl/maths/Vector4D.h>
+#include <rendering/ShaderProgram.h>
+#include <maths/Vector4D.h>
 
 namespace mathernogl {
 

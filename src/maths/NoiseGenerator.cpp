@@ -1,4 +1,4 @@
-#include <mathernogl/maths/NoiseGenerator.h>
+#include <maths/NoiseGenerator.h>
 
 namespace mathernogl {
 

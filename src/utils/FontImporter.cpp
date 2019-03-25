@@ -3,8 +3,8 @@
 //
 
 #include <map>
-#include "mathernogl/utils/FontImporter.h"
-#include "mathernogl/utils/FileIO.h"
+#include "utils/FontImporter.h"
+#include "utils/FileIO.h"
 
 namespace mathernogl
   {

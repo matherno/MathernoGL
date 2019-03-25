@@ -1,4 +1,4 @@
-#include <mathernogl/maths/Vector4D.h>
+#include <maths/Vector4D.h>
 
 namespace mathernogl {
 

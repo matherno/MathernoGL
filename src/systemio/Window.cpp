@@ -1,7 +1,7 @@
 /*	Author: Matthew Littlemore	*/
 /*	Purpose: Used to create and manage a window using GLFW	*/
 
-#include <mathernogl/systemio/Window.h>
+#include <systemio/Window.h>
 
 namespace mathernogl {
 

@@ -7,3 +7,4 @@ Makefile
 MathernoGL.code-workspace
 MathernoGL.make
 obj
+include

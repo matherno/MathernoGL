@@ -2,7 +2,7 @@
 // Created by matt on 5/06/17.
 //
 
-#include "mathernogl/maths/Arithmetic.h"
+#include "maths/Arithmetic.h"
 #include <cmath>
 #include <assert.h>
 #include <complex>

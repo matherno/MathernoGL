@@ -10,7 +10,7 @@ project "MathernoGL"
 
    links { "GL", "GLEW", "glfw", "freeimage" }
    
-   includedirs { "./dependencies/include", "./include/mathernogl", "./include", "./src" }
+   includedirs { "./dependencies/include", "./src" }
 
    cppdialect "C++14"
 

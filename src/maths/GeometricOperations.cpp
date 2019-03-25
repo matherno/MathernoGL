@@ -2,8 +2,8 @@
 // Created by matt on 4/06/18.
 //
 
-#include "mathernogl/maths/GeometricOperations.h"
-#include "mathernogl/maths/VectorOperations.h"
+#include "maths/GeometricOperations.h"
+#include "maths/VectorOperations.h"
 
 namespace mathernogl
   {

@@ -2,8 +2,8 @@
 // Created by matt on 20/04/17.
 //
 
-#include "mathernogl/utils/GLUtils.h"
-#include <mathernogl/utils/Logging.h>
+#include "utils/GLUtils.h"
+#include <utils/Logging.h>
 
 namespace mathernogl{
 

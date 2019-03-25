@@ -2,9 +2,9 @@
 // Created by matherno on 3/09/17.
 //
 
-#include <mathernogl/utils/Logging.h>
-#include <mathernogl/utils/MeshUtils.h>
-#include <mathernogl/utils/Misc.h>
+#include <utils/Logging.h>
+#include <utils/MeshUtils.h>
+#include <utils/Misc.h>
 #include <set>
 
 #define TINYOBJLOADER_IMPLEMENTATION

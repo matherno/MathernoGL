@@ -1,4 +1,4 @@
-#include <mathernogl/data/VertexArray.h>
+#include <data/VertexArray.h>
 
 namespace mathernogl {
 

@@ -2,10 +2,10 @@
 // Created by matt on 16/06/17.
 //
 
-#include <mathernogl/utils/Logging.h>
+#include <utils/Logging.h>
 #include <cstring>
-#include <mathernogl/Types.h>
-#include "mathernogl/image/Image.h"
+#include <Types.h>
+#include "image/Image.h"
 
 namespace mathernogl {
 

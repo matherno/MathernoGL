@@ -2,8 +2,8 @@
 // Created by matt on 10/03/18.
 //
 
-#include <mathernogl/data/GPUBufferStatic.h>
-#include "mathernogl/rendering/ScreenTextureRenderer.h"
+#include <data/GPUBufferStatic.h>
+#include "rendering/ScreenTextureRenderer.h"
 
 static const std::string vertexShader =
   "#version 330\n"

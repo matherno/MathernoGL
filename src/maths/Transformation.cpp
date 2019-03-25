@@ -1,4 +1,4 @@
-#include <mathernogl/maths/Transformation.h>
+#include <maths/Transformation.h>
 
 namespace mathernogl {
 

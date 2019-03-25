@@ -1,5 +1,5 @@
-#include <mathernogl/Assert.h>
-#include "mathernogl/data/GPUBufferDynamic.h"
+#include <Assert.h>
+#include "data/GPUBufferDynamic.h"
 
 namespace mathernogl {
 

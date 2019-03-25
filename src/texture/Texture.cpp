@@ -1,4 +1,4 @@
-#include <mathernogl/texture/Texture.h>
+#include <texture/Texture.h>
 
 namespace mathernogl {
 

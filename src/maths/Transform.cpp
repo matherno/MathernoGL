@@ -2,8 +2,8 @@
 // Created by matherno on 1/10/17.
 //
 
-#include "mathernogl/maths/Transform.h"
-#include "mathernogl/maths/MatrixOperations.h"
+#include "maths/Transform.h"
+#include "maths/MatrixOperations.h"
 
 mathernogl::Transform::Transform()
     : transformMatrix(mathernogl::matrixIdentity()) {

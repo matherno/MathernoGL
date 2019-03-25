@@ -1,4 +1,4 @@
-#include <mathernogl/utils/Logging.h>
+#include <utils/Logging.h>
 
 #define LOGNAME "Log.txt"
 

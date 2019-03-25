@@ -2,8 +2,8 @@
 // Created by matt on 27/03/17.
 //
 
-#include "mathernogl/systemio/InputHandler.h"
-#include "mathernogl/utils/Logging.h"
+#include "systemio/InputHandler.h"
+#include "utils/Logging.h"
 
 namespace mathernogl{
 

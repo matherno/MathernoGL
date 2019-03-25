@@ -1,5 +1,5 @@
-#include <mathernogl/maths/RandomGenerator.h>
-#include <mathernogl/maths/Maths.h>
+#include <maths/RandomGenerator.h>
+#include <maths/Maths.h>
 
 namespace mathernogl {
 
