@@ -1,3 +1,9 @@
 cmake-build-debug
 cmake-build-release
 .idea
+.vscode
+bin_*
+Makefile
+MathernoGL.code-workspace
+MathernoGL.make
+obj
