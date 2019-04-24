@@ -1,6 +1,6 @@
 #version 330
 
-uniform vec3 inColours[32];
+uniform vec3 inColours[64];
 uniform vec3 inLightDir = vec3(-0.5, -0.2, -0.3);
 uniform sampler2DShadow inShadowMap;
 uniform mat4 inShadowMapProjection;
@@ -49,6 +49,38 @@ vec3 colourAt(int index)
     case 29: return inColours[29];
     case 30: return inColours[30];
     case 31: return inColours[31];
+    case 32: return inColours[32];
+    case 33: return inColours[33];
+    case 34: return inColours[34];
+    case 35: return inColours[35];
+    case 36: return inColours[36];
+    case 37: return inColours[37];
+    case 38: return inColours[38];
+    case 39: return inColours[39];
+    case 40: return inColours[40];
+    case 41: return inColours[41];
+    case 42: return inColours[42];
+    case 43: return inColours[43];
+    case 44: return inColours[44];
+    case 45: return inColours[45];
+    case 46: return inColours[46];
+    case 47: return inColours[47];
+    case 48: return inColours[48];
+    case 49: return inColours[49];
+    case 50: return inColours[50];
+    case 51: return inColours[51];
+    case 52: return inColours[52];
+    case 53: return inColours[53];
+    case 54: return inColours[54];
+    case 55: return inColours[55];
+    case 56: return inColours[56];
+    case 57: return inColours[57];
+    case 58: return inColours[58];
+    case 59: return inColours[59];
+    case 60: return inColours[60];
+    case 61: return inColours[61];
+    case 62: return inColours[62];
+    case 63: return inColours[63];
     }
   return vec3(0, 0, 0);
   }

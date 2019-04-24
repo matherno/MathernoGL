@@ -374,9 +374,10 @@ uint VoxelBatchManager::addColour(const mathernogl::Vector3D& colour)
     colIndex++;
     }
 
-  colIndex = (uint)coloursArray.size();
-  coloursArray.push_back(colour);
-  ASSERT(coloursArray.size() <= 32, "More colours aren't supported as of yet");
+  ASSERT(coloursArray.size() < 64, "More colours aren't supported as of yet");
+  if (coloursArray.size() < 64)
+    coloursArray.push_back(colour);
+  colIndex = (uint)(coloursArray.size() - 1);
   return colIndex;
   }
 
