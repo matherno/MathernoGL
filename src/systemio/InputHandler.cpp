@@ -4,12 +4,18 @@
 
 #include "systemio/InputHandler.h"
 #include "utils/Logging.h"
+#include "imgui/imgui.h"
 
 namespace mathernogl{
 
 namespace {
     InputHandler* inputHandler;	//provides a means for the static callback functions to access the InputHandler object, should only need one throughout system
 }
+
+static GLFWmousebuttonfun prevUserCallbackMousebutton = NULL;
+static GLFWscrollfun prevUserCallbackScroll = NULL;
+static GLFWkeyfun prevUserCallbackKey = NULL;
+static GLFWcursorposfun prevUserCallbackCursorPos = NULL;
 
 void keyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods);
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
@@ -26,10 +32,10 @@ void InputHandler::init(GLFWwindow* window) {
     inputHandler = this;    //so the static functions below have access to this object
     this->window = window;
 
-    glfwSetKeyCallback(window, keyCallback);
-    glfwSetMouseButtonCallback(window, mouseButtonCallback);
-    glfwSetScrollCallback(window, mouseScrollCallback);
-    glfwSetCursorPosCallback(window, mousePosCallback);
+    prevUserCallbackKey = glfwSetKeyCallback(window, keyCallback);
+    prevUserCallbackMousebutton = glfwSetMouseButtonCallback(window, mouseButtonCallback);
+    prevUserCallbackScroll = glfwSetScrollCallback(window, mouseScrollCallback);
+    prevUserCallbackCursorPos = glfwSetCursorPosCallback(window, mousePosCallback);
 }
 
 void InputHandler::cleanUp() {
@@ -37,6 +43,11 @@ void InputHandler::cleanUp() {
     heldKeys.clear();
     heldMouseButtons.clear();
     lastMousePos = Vector2D(0);
+
+    glfwSetKeyCallback(window, prevUserCallbackKey);
+    glfwSetMouseButtonCallback(window, prevUserCallbackMousebutton);
+    glfwSetScrollCallback(window, prevUserCallbackScroll);
+    glfwSetCursorPosCallback(window, prevUserCallbackCursorPos);
 }
 
 //can be used to set the cursor mode -> enabled, hidden, or disabled
@@ -126,11 +137,15 @@ bool InputHandler::isMouseButtonAction(int buttonNum, InputAction action) const 
 
 //called by the callback functions to process a key event
 void InputHandler::processKey(int key, int glfwAction) {
+    if (glfwAction == GLFW_RELEASE) {
+        heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(), key), heldKeys.end());
+    }
+    
+    if(ImGui::GetIO().WantCaptureKeyboard)
+      return;
+
     if (glfwAction == GLFW_PRESS) {
         heldKeys.push_back(key);
-    }
-    else if (glfwAction == GLFW_RELEASE) {
-        heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(), key), heldKeys.end());
     }
 
     KeyEvent keyEvent;
@@ -141,11 +156,15 @@ void InputHandler::processKey(int key, int glfwAction) {
 
 //called by the callback functions to process a mouse button event
 void InputHandler::processMouseButton(int button, int glfwAction) {
+    if (glfwAction == INPUT_RELEASED) {
+        heldMouseButtons.erase(std::remove(heldMouseButtons.begin(), heldMouseButtons.end(), button), heldMouseButtons.end());
+    }
+
+    if(ImGui::GetIO().WantCaptureMouse)
+      return;
+      
     if (glfwAction == INPUT_PRESSED) {
         heldMouseButtons.push_back(button);
-    }
-    else if (glfwAction == INPUT_RELEASED) {
-        heldMouseButtons.erase(std::remove(heldMouseButtons.begin(), heldMouseButtons.end(), button), heldMouseButtons.end());
     }
 
     MouseButtonEvent mouseButtonEvent;
@@ -156,11 +175,17 @@ void InputHandler::processMouseButton(int button, int glfwAction) {
 
 //called by the callback functions to process a mouse scroll event
 void InputHandler::processScrollWheel(double yOffset) {
+    if(ImGui::GetIO().WantCaptureMouse)
+        return;
+        
     scrollWheelOffset += yOffset;
 }
 
 //called by the callback functions to process a mouse offset event
 void InputHandler::processMouseOffset(const Vector2D &mousePos) {
+    if(ImGui::GetIO().WantCaptureMouse)
+      return;
+
     if(!gotLastMousePos){
         lastMousePos = mousePos;
         gotLastMousePos = true;
@@ -172,18 +197,26 @@ void InputHandler::processMouseOffset(const Vector2D &mousePos) {
 //callback functions that glfw will call for input events
 
 void keyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods) {
+    if (prevUserCallbackKey != NULL)
+        prevUserCallbackKey(window, key, scanCode, action, mods);
     inputHandler->processKey(key, action);
 }
 
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+    if (prevUserCallbackMousebutton != NULL)
+        prevUserCallbackMousebutton(window, button, action, mods);
     inputHandler->processMouseButton(button, action);
 }
 
 void mouseScrollCallback(GLFWwindow* window, double xOffset, double yOffset) {
+    if (prevUserCallbackScroll != NULL)
+        prevUserCallbackScroll(window, xOffset, yOffset);
     inputHandler->processScrollWheel(yOffset);
 }
 
 void mousePosCallback(GLFWwindow *window, double xPos, double yPos) {
+    if (prevUserCallbackCursorPos != NULL)
+        prevUserCallbackCursorPos(window, xPos, yPos);
     inputHandler->processMouseOffset(Vector2D(xPos, yPos));
 }
 

@@ -4,6 +4,8 @@
 
 #include "RenderContextImpl.h"
 #include "RenderableSetImpl.h"
+#include "systemio/Window.h"
+
 
 using namespace mathernogl;
 
@@ -74,6 +76,19 @@ uint RenderContextImpl::getNextRenderableID()
   return nextRenderableID++;
   }
 
+void RenderContextImpl::addAndInitialiseRenderable(RenderablePtr renderable)
+  {
+  renderable->initialise(this);
+  getRenderableSet()->addRenderable(renderable);
+  }
+
+void RenderContextImpl::removeAndCleanUpRenderable(RenderablePtr renderable)
+  {
+  renderable->cleanUp(this);
+  getRenderableSet()->removeRenderable(renderable->getID());
+  }
+
+
 void RenderContextImpl::setWorldToCamera(const Matrix4& transform)
   {
   worldToCameraTransform = transform;
@@ -106,6 +121,8 @@ void RenderContextImpl::render()
   pushFrameBuffer(multiSampledFBO);
   multiSampledFBO->clear();
 
+  window->imGuiStartNewFrame();
+
   //  render each stage
   for (int stage : drawStages)
     {
@@ -120,6 +137,7 @@ void RenderContextImpl::render()
   window->clear();
   multiSampledFBO->blitToScreen(window->getWidth(), window->getHeight());
 
+  window->imGuiRenderFrame();
   window->update();
   isRendering = false;
   }

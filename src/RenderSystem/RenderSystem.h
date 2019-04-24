@@ -145,6 +145,8 @@ public:
   virtual void reset() = 0;     //  should clear all caches and stored state, but leave the window open
   virtual uint getNextRenderableID() = 0;
   virtual RenderableSetPtr getRenderableSet() = 0;
+  virtual void addAndInitialiseRenderable(RenderablePtr renderable) = 0;
+  virtual void removeAndCleanUpRenderable(RenderablePtr renderable) = 0;
   virtual void setWorldToCamera(const Matrix4& transform) = 0;
   virtual void setCameraToClip(const Matrix4& transform) = 0;
   virtual const Matrix4* getWorldToCamera() const = 0;

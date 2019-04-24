@@ -4,6 +4,17 @@
 
 #include "GameContextImpl.h"
 
+class IMGuiRenderable : public Renderable
+  {
+private:
+  GameContextImpl* gameContext;
+public:
+  IMGuiRenderable(GameContextImpl* context, uint id) : Renderable(id, DRAW_STAGE_UI), gameContext(context) {}
+  virtual void initialise(RenderContext* renderContext) override { }
+  virtual void render(RenderContext* renderContext) override { gameContext->doIMGui(); }
+  virtual void cleanUp(RenderContext* renderContext) override { }
+  };
+
 bool GameContextImpl::initialise()
   {
   stage = stageInit;
@@ -13,6 +24,8 @@ bool GameContextImpl::initialise()
   uiManager.initialise(this);
   gameTime = 0;
   stage = stageNone;
+  imGuiRenderable.reset(new IMGuiRenderable(this, getRenderContext()->getNextRenderableID()));
+  getRenderContext()->addAndInitialiseRenderable(imGuiRenderable);
   return true;
   }
 
@@ -26,6 +39,12 @@ void GameContextImpl::cleanUp()
   boundingBoxManager.cleanUp();
   uiManager.cleanUp(this);
   stage = stageNone;
+  inputManager.cleanUp();
+  if (imGuiRenderable)
+    {
+    getRenderContext()->removeAndCleanUpRenderable(imGuiRenderable);
+    imGuiRenderable.reset();  
+    }
   }
 
 void GameContextImpl::addActor(GameActorPtr actor)
@@ -200,4 +219,11 @@ bool BBInputHandler::onMouseReleased(GameContext* gameContext, uint button, uint
   {
   gameContext->getBoundingBoxManager()->performMousePicking(gameContext, mouseX, mouseY);
   return false;
+  }
+
+
+void GameContextImpl::doIMGui()
+  {
+  for (GameActorPtr actor : *actors.getList())
+    actor->doIMGui(this);
   }

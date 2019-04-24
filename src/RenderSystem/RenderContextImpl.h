@@ -8,6 +8,7 @@
 #include "ResourceCache.h"
 #include "VoxelBatchManager.h"
 #include "utils/Misc.h"
+#include "systemio/Window.h"
 
 #define SHADER_VAR_VERT_TO_WORLD "inVertToWorld"
 #define SHADER_VAR_WORLD_TO_CAMERA "inWorldToCamera"
@@ -76,6 +77,8 @@ public:
 
   virtual uint getNextRenderableID() override;
   virtual RenderableSetPtr getRenderableSet() override { return renderableSet; }
+  virtual void addAndInitialiseRenderable(RenderablePtr renderable) override;
+  virtual void removeAndCleanUpRenderable(RenderablePtr renderable) override;
 
   virtual void setWorldToCamera(const Matrix4& transform) override;
   virtual void setCameraToClip(const Matrix4& transform) override;

@@ -3,6 +3,10 @@
 
 #include <systemio/Window.h>
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_impl_glfw.h"
+
 namespace mathernogl {
 
 Window::Window() {
@@ -45,13 +49,14 @@ void Window::create(uint windowWidth, uint windowHeight, std::string windowName,
 
   glEnable(GL_MULTISAMPLE);
   glViewport(0, 0, windowWidth, windowHeight);
+
+  imGuiInit();
 }
 
 //clears the colour and depth buffers of the window
 void Window::clear() const {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-
 
 //to be called to update the screen to draw the next frame
 void Window::update() const {
@@ -60,6 +65,31 @@ void Window::update() const {
 
 	//update GLFW
 	glfwPollEvents();
+}
+
+void Window::imGuiInit(){
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+  ImGui::StyleColorsDark();
+  ImGui_ImplGlfw_InitForOpenGL(window, true);
+  ImGui_ImplOpenGL3_Init("#version 130");
+}
+
+void Window::imGuiStartNewFrame(){
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
+  ImGui::NewFrame();
+}
+
+void Window::imGuiRenderFrame(){
+  ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void Window::imGuiCleanUp(){
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
 }
 
 //will return true if the GLFW window is closed
@@ -115,6 +145,7 @@ void Window::setClearColour(float r, float g, float b, float a) {
 }
 
 void Window::close() {
+    imGuiCleanUp();
     glfwDestroyWindow(window);
 }
 

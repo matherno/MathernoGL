@@ -4,6 +4,7 @@
 
 #include "RenderableVoxels.h"
 #include "RenderUtils.h"
+#include "imgui/imgui.h"
 
 RenderableVoxels::RenderableVoxels(uint id, int drawStage) : Renderable(id, drawStage)
   {
@@ -24,13 +25,21 @@ void RenderableVoxels::cleanUp(RenderContext* renderContext)
 
 void RenderableVoxels::render(RenderContext* renderContext)
   {
+  mathernogl::setDepthTest(true);
   mathernogl::clearGLErrors();
   renderContext->activateShaderProgram(shaderProgram);
   mathernogl::setFaceCulling(backFaceCulling);
 
   int colIdx = 0;
   for (Vector3D col : storage->colours)
-    shaderProgram->setVarVec3Array("inColours", colIdx++, col);
+    {
+    float h, s, v, r = col.x, g = col.y, b = col.z;
+    ImGui::ColorConvertRGBtoHSV(r, g, b, h, s, v);
+    s *= colSaturationFactor;
+    v *= colValueFactor;
+    ImGui::ColorConvertHSVtoRGB(h, s, v, r, g, b);
+    shaderProgram->setVarVec3Array("inColours", colIdx++, Vector3D(r, g, b));
+    }
   shaderProgram->setVarFloat("inVoxelSize", voxelSize);
 
   storage->getVAO().bind();
@@ -51,6 +60,16 @@ void RenderableVoxels::setVoxelStorage(VoxelStoragePtr storage)
 void RenderableVoxels::setVoxelSize(double size)
   {
   voxelSize = size;
+  }
+
+void RenderableVoxels::setSaturationFactor(double factor)
+  {
+  colSaturationFactor = factor;
+  }
+
+void RenderableVoxels::setValueFactor(double factor)
+  {
+  colValueFactor = factor;
   }
 
 BoundingBoxPtr RenderableVoxels::getBounds()

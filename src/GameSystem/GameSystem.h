@@ -25,6 +25,7 @@ public:
   virtual void onAttached(GameContext* gameContext) = 0;
   virtual void onUpdate(GameContext* gameContext) = 0;
   virtual void onDetached(GameContext* gameContext) = 0;
+  virtual void doIMGui(GameContext* gameContext) {};
   };
 typedef std::shared_ptr<GameActor> GameActorPtr;
 
@@ -151,6 +152,7 @@ public:
   virtual Vector3D getViewDirectionAtCursor(uint cursorX, uint cursorY) const = 0;
   virtual void setSpeed(uint speed) = 0;
   virtual uint getSpeed() const = 0;
+  virtual void doIMGui() = 0;
   };
 
 

@@ -37,6 +37,7 @@ private:
   bool shouldEnd = false;
   BoundingBoxManagerImpl boundingBoxManager;
   uint speed = 1;
+  RenderablePtr imGuiRenderable;
 
 public:
   GameContextImpl(RenderContextPtr renderContext) : GameContext(renderContext) {}
@@ -84,6 +85,7 @@ public:
   virtual void setSpeed(uint speed) override { this->speed = speed; }
   virtual uint getSpeed() const override { return speed; }
 
+  virtual void doIMGui() override;
 
 protected:
   void removePendingActors();

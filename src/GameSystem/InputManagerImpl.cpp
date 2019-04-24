@@ -61,6 +61,7 @@ void InputManagerImpl::processInput(GameContext* gameContext)
   inputSource.checkHeldButtons();
 
   //  fire key events
+
   for (const mathernogl::KeyEvent& event : *inputSource.getKeyEvents())
     {
     if (event.action == mathernogl::INPUT_PRESSED)

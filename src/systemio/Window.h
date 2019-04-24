@@ -27,6 +27,8 @@ public:
   void close();
   void clear() const;
 	void update() const;
+  void imGuiStartNewFrame();
+  void imGuiRenderFrame();
 	bool isOpen() const;
 	GLFWwindow* getGLFWWindow() const { return window; }
 	float getAspectRatio() const;
@@ -34,8 +36,12 @@ public:
 	uint getHeight() const;
 	Vector2D getSize() const;
 	void setVSync(bool vsync);
-    void setClearColour(float r, float g, float b, float a = 1.0);
+  void setClearColour(float r, float g, float b, float a = 1.0);
 	float getFPS(int numSampleFrames);
+
+private:
+  void imGuiInit();
+  void imGuiCleanUp();
 };
 
 }
